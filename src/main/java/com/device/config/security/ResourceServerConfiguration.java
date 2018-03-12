@@ -22,7 +22,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     	 //.antMatchers("/db").hasAnyRole("DB")//以 db 开头的请求，需要db权限的用户
     	 //任何没有被匹配上的url 需要用户被验证
     	 .anyRequest().authenticated()
-    	 //.and().formLogin().loginPage("/login").permitAll()//允许所用用户访问登录页
     	 .and().csrf().disable();
     	  
     }

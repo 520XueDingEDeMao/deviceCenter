@@ -14,49 +14,48 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import com.device.config.prop.AliGeniceClientProperties;
+import com.device.service.DeviceUserDetailsService;
+
 /**
  * 授权服务器
+ * 
  * @author ningque
  *
  */
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-	
-	
+
 	private TokenStore tokenStore = new InMemoryTokenStore();
 	@Autowired
 	private AliGeniceClientProperties aliGeniceProp;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	@Autowired
+	private DeviceUserDetailsService userDetailsService;
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    	 clients.inMemory()
-         .withClient(aliGeniceProp.getClient_id())//客户端ID
-         .authorizedGrantTypes(aliGeniceProp.getAuthorizedGrantTypes(),"refresh_token")//设置验证方式
-         .scopes(aliGeniceProp.getScopes())
-         .secret(aliGeniceProp.getClient_secret())
-         .accessTokenValiditySeconds(aliGeniceProp.getAccessTokenValiditySeconds())//token过期时间
-         .refreshTokenValiditySeconds(aliGeniceProp.getRefreshTokenValiditySeconds()); //refresh过期时间
-    }
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.inMemory().withClient(aliGeniceProp.getClient_id())// 客户端ID
+				.authorizedGrantTypes(aliGeniceProp.getAuthorizedGrantTypes(), "refresh_token")// 设置验证方式
+				.scopes(aliGeniceProp.getScopes())// 作用域
+				.secret(aliGeniceProp.getClient_secret())// 客户端密码
+				.accessTokenValiditySeconds(aliGeniceProp.getAccessTokenValiditySeconds())// token过期时间
+				.refreshTokenValiditySeconds(aliGeniceProp.getRefreshTokenValiditySeconds()); // refresh过期时间
+	}
 
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints
-                .tokenStore(tokenStore)
-                .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
-    }
-    
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setSupportRefreshToken(true); // support refresh token
-        tokenServices.setTokenStore(tokenStore); // use in-memory token store
-        return tokenServices;
-}
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
+				.userDetailsService(userDetailsService);
+	}
+
+	@Bean
+	@Primary
+	public DefaultTokenServices tokenServices() {
+		DefaultTokenServices tokenServices = new DefaultTokenServices();
+		tokenServices.setSupportRefreshToken(true); // support refresh token
+		tokenServices.setTokenStore(tokenStore); // use in-memory token store
+		return tokenServices;
+	}
 }
