@@ -1,0 +1,9 @@
+oauth:
+  aligenie:
+    client:
+      client_id: aligenie_client_id
+      client_secret: aligenie_client_secret
+      authorizedGrantTypes: authorization_code
+      scopes: read
+      accessTokenValiditySeconds: 3600
+      refreshTokenValiditySeconds: 3600
