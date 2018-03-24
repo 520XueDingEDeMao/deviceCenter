@@ -8,15 +8,15 @@ public class PreController {
 	
 	public static boolean running=true;
 	
-	@RequestMapping("/running")
-	public String running() {
+	@RequestMapping("/preload")
+	public String preload() {
 		if(running) {
 			return "看什么看，我跑的好好的!!";
 		}else {
 			return "不用看了，已经挂了!!";
 		}
 	}
-	@RequestMapping("/stopning")
+	@RequestMapping("/stopping")
 	public void stopning() {
 		running=false;
 	}
